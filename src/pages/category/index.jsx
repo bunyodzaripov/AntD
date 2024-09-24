@@ -77,6 +77,7 @@ const Index = () => {
             open={open}
             handleClose={handleClose}
             update={update}
+            setUpdate={setUpdate}
             getCategory={getCategory}
          />
          <div className="flex justify-between mb-4">

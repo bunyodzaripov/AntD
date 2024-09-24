@@ -8,7 +8,6 @@ const Index = () => {
    const navigate = useNavigate();
    const onFinish = async (values) => {
       console.log(values);
-
       try {
          const response = await auth.sign_in(values);
          let access_token = response?.data?.data.tokens.access_token;

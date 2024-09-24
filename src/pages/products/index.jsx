@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { brand } from "@service";
+import { products } from "@service";
 import { UniversalTable } from "@components";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Button } from "antd";
 const Index = () => {
    const [data, setData] = useState([]);
    const columns = [
@@ -13,7 +12,7 @@ const Index = () => {
          align: "center",
       },
       {
-         title: "Brand name",
+         title: "Product name",
          dataIndex: "name",
          key: "name",
          align: "center",
@@ -34,18 +33,18 @@ const Index = () => {
          ),
       },
    ];
-   const getBrand = async () => {
+   const getProducts = async () => {
       try {
-         const response = await brand.get();
+         const response = await products.get();
          if (response.status === 200) {
-            setData(response?.data?.data?.brands);
+            setData(response?.data?.data?.products);
          }
       } catch (error) {
          console.log(error);
       }
    };
    useEffect(() => {
-      getBrand();
+      getProducts();
    }, []);
    return (
       <div>

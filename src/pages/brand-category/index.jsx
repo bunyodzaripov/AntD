@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { brand } from "@service";
+import { brandCategory } from "@service";
 import { UniversalTable } from "@components";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button } from "antd";
@@ -13,7 +13,7 @@ const Index = () => {
          align: "center",
       },
       {
-         title: "Brand name",
+         title: "Category name",
          dataIndex: "name",
          key: "name",
          align: "center",
@@ -34,18 +34,18 @@ const Index = () => {
          ),
       },
    ];
-   const getBrand = async () => {
+   const getBrandCategory = async () => {
       try {
-         const response = await brand.get();
+         const response = await brandCategory.get();
          if (response.status === 200) {
-            setData(response?.data?.data?.brands);
+            setData(response?.data?.data?.brandCategories);
          }
       } catch (error) {
          console.log(error);
       }
    };
    useEffect(() => {
-      getBrand();
+      getBrandCategory();
    }, []);
    return (
       <div>
