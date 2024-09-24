@@ -5,4 +5,14 @@ import brand from "./brand";
 import brandCategory from "./brand-category";
 import adsCategory from "./ads-category";
 import stock from "./stock";
-export { auth, category, products, brand, brandCategory, adsCategory, stock };
+import subCategory from "./sub-category";
+export {
+   auth,
+   category,
+   products,
+   brand,
+   brandCategory,
+   adsCategory,
+   stock,
+   subCategory,
+};

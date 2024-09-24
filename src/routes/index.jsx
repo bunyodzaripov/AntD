@@ -17,6 +17,7 @@ import {
    Stock,
    Settings,
    Products,
+   SubCategory,
 } from "@pages";
 const Index = () => {
    const router = createBrowserRouter(
@@ -26,6 +27,7 @@ const Index = () => {
             <Route path="admin-layout" element={<AdminLayout />}>
                <Route index element={<Products />} />
                <Route path="category" element={<Category />} />
+               <Route path="sub-category/:id" element={<SubCategory />} />
                <Route path="brand" element={<Brand />} />
                <Route path="brand-category" element={<BrandCategory />} />
                <Route path="ads" element={<AdsCategory />} />

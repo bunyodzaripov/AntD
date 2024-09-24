@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { products } from "@service";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router";
+import { subCategory } from "@service";
 import { UniversalTable } from "@components";
-import { Button } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 const Index = () => {
    const [data, setData] = useState([]);
+   const { id } = useParams();
    const columns = [
       {
          title: "ID",
@@ -13,7 +15,7 @@ const Index = () => {
          align: "center",
       },
       {
-         title: "Product name",
+         title: "Sub category name",
          dataIndex: "name",
          key: "name",
          align: "center",
@@ -34,18 +36,18 @@ const Index = () => {
          ),
       },
    ];
-   const getProducts = async () => {
+   const getSubCategory = async () => {
       try {
-         const response = await products.get();
+         const response = await subCategory.get(id);
          if (response.status === 200) {
-            setData(response?.data?.data?.products);
+            setData(response?.data?.data?.subcategories);
          }
       } catch (error) {
          console.log(error);
       }
    };
    useEffect(() => {
-      getProducts();
+      getSubCategory();
    }, []);
    return (
       <div>

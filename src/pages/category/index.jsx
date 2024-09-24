@@ -2,14 +2,20 @@ import React, { useEffect, useState } from "react";
 import { UniversalTable, CategoryModal } from "@components";
 import { category } from "@service";
 import { Button, Input, Space } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+   EditOutlined,
+   DeleteOutlined,
+   FolderViewOutlined,
+} from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
+import { useNavigate } from "react-router";
 const { Search } = Input;
 const Index = () => {
    const [open, setOpen] = useState(false);
    const [data, setData] = useState([]);
    const [update, setUpdate] = useState({});
+   const navigate = useNavigate();
    const openModal = () => {
       setOpen(true);
    };
@@ -45,6 +51,12 @@ const Index = () => {
                >
                   <EditOutlined />
                </Button>
+               <Button
+                  style={{ marginLeft: "10px" }}
+                  onClick={() => viewCategory(item.id)}
+               >
+                  <FolderViewOutlined />
+               </Button>
             </div>
          ),
       },
@@ -64,6 +76,9 @@ const Index = () => {
    const editCategory = async (item) => {
       setUpdate(item);
       setOpen(true);
+   };
+   const viewCategory = async (id) => {
+      navigate(`/admin-layout/sub-category/${id}`);
    };
    useEffect(() => {
       getCategory();

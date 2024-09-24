@@ -8,6 +8,7 @@ import AdsCategory from "./ads-category";
 import Stock from "./stock";
 import Settings from "./settings";
 import Products from "./products";
+import SubCategory from "./sub-category";
 export {
    SignIn,
    SignUp,
@@ -19,4 +20,5 @@ export {
    Stock,
    Settings,
    Products,
+   SubCategory,
 };
