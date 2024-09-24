@@ -1,0 +1,21 @@
+import React from "react";
+import { Table } from "antd";
+
+export default function UniversalTable(props) {
+   const {
+      columns = [],
+      dataSource = [],
+      rowKey = "id",
+      pagination = true,
+   } = props;
+
+   return (
+      <Table
+         columns={columns}
+         dataSource={dataSource}
+         rowKey={rowKey}
+         pagination={pagination}
+         bordered
+      />
+   );
+}
