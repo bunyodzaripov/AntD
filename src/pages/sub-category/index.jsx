@@ -3,10 +3,22 @@ import { useParams } from "react-router";
 import { subCategory } from "@service";
 import { UniversalTable } from "@components";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, Input, Space } from "antd";
+const { Search } = Input;
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
+import { SubCategoryModal } from "@components";
 const Index = () => {
    const [data, setData] = useState([]);
+   const [open, setOpen] = useState(false);
+   const [update, setUpdate] = useState({});
    const { id } = useParams();
+   const openModal = () => {
+      setOpen(true);
+   };
+   const handleClose = () => {
+      setOpen(false);
+   };
    const columns = [
       {
          title: "ID",
@@ -15,7 +27,7 @@ const Index = () => {
          align: "center",
       },
       {
-         title: "Sub category name",
+         title: "Subcategory",
          dataIndex: "name",
          key: "name",
          align: "center",
@@ -24,12 +36,15 @@ const Index = () => {
          title: "Action",
          key: "action",
          align: "center",
-         render: () => (
+         render: (item) => (
             <div>
-               <Button>
+               <Button onClick={() => deleteSubCategory(item.id)}>
                   <DeleteOutlined />
                </Button>
-               <Button style={{ marginLeft: "10px" }}>
+               <Button
+                  style={{ marginLeft: "10px" }}
+                  onClick={() => editSubCategory(item)}
+               >
                   <EditOutlined />
                </Button>
             </div>
@@ -46,11 +61,49 @@ const Index = () => {
          console.log(error);
       }
    };
+   const deleteSubCategory = async (id) => {
+      try {
+         const res = await subCategory.delete(id);
+         if (res.status === 200) {
+            getSubCategory();
+         }
+      } catch (error) {
+         console.log(error);
+      }
+   };
+   const editSubCategory = (item) => {
+      setUpdate(item);
+      setOpen(true);
+   };
    useEffect(() => {
       getSubCategory();
    }, []);
+   const onSearch = (value, _e, info) => {
+      console.log(value, _e, info);
+   };
    return (
       <div>
+         <SubCategoryModal
+            open={open}
+            handleClose={handleClose}
+            update={update}
+            setUpdate={setUpdate}
+            id={id}
+            getSubCategory={getSubCategory}
+         />
+         <div className="flex justify-between mb-4">
+            <Space direction="vertical">
+               <Search
+                  placeholder="Search category"
+                  onSearch={onSearch}
+                  allowClear
+               />
+            </Space>
+            <Button onClick={openModal}>
+               <FontAwesomeIcon icon={faSquarePlus} />
+               <span className="ml-2">Add New Subcategory</span>
+            </Button>
+         </div>
          <UniversalTable
             columns={columns}
             dataSource={data}
