@@ -7,6 +7,7 @@ export default function UniversalTable(props) {
       dataSource = [],
       rowKey = "id",
       pagination = true,
+      handleChange,
    } = props;
 
    return (
@@ -15,6 +16,7 @@ export default function UniversalTable(props) {
          dataSource={dataSource}
          rowKey={rowKey}
          pagination={pagination}
+         onChange={(pagination) => handleChange(pagination)}
          bordered
       />
    );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { UniversalTable, CategoryModal } from "@components";
+import { UniversalTable } from "@components";
 import { category } from "@service";
+import { Category } from "@modals";
 import { Button, Input, Space } from "antd";
 import {
    EditOutlined,
@@ -15,12 +16,19 @@ const Index = () => {
    const [open, setOpen] = useState(false);
    const [data, setData] = useState([]);
    const [update, setUpdate] = useState({});
+   const [total, setTotal] = useState();
+   const [params, setParams] = useState({
+      search: "",
+      limit: 2,
+      page: 1,
+   });
    const navigate = useNavigate();
    const openModal = () => {
       setOpen(true);
    };
    const handleClose = () => {
       setOpen(false);
+      setUpdate({});
    };
    const columns = [
       {
@@ -62,9 +70,10 @@ const Index = () => {
       },
    ];
    const getCategory = async () => {
-      const response = await category.get();
+      const response = await category.get(params);
       if (response.status === 200) {
          setData(response?.data?.data?.categories);
+         setTotal(response?.data?.data?.count);
       }
    };
    const deleteCategory = async (id) => {
@@ -82,13 +91,21 @@ const Index = () => {
    };
    useEffect(() => {
       getCategory();
-   }, []);
+   }, [params]);
    const onSearch = (value, _e, info) => {
       console.log(value, _e, info);
    };
+   const handleTableChange = (pagination) => {
+      const { current, pageSize } = pagination;
+      setParams({
+         ...params,
+         page: current,
+         limit: pageSize,
+      });
+   };
    return (
       <div>
-         <CategoryModal
+         <Category
             open={open}
             handleClose={handleClose}
             update={update}
@@ -111,7 +128,14 @@ const Index = () => {
          <UniversalTable
             columns={columns}
             dataSource={data}
-            pagination={{ pageSize: 5 }}
+            pagination={{
+               current: params.page,
+               pageSize: params.limit,
+               total: total,
+               showSizeChanger: true,
+               pageSizeOptions: [2, 3, 5, 10, 20],
+            }}
+            handleChange={handleTableChange}
          />
       </div>
    );

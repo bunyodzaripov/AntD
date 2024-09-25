@@ -3,7 +3,6 @@ import { Button, Modal, Input, Form } from "antd";
 import { category } from "@service";
 const App = (props) => {
    const [form] = Form.useForm();
-
    const {
       open,
       handleClose,

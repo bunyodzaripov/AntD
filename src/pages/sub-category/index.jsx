@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { subCategory } from "@service";
-import { UniversalTable } from "@components";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Input, Space } from "antd";
-const { Search } = Input;
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
-import { SubCategoryModal } from "@components";
+import { subCategory } from "@service";
+import { UniversalTable } from "@components";
+import { SubCategory } from "@modals";
+const { Search } = Input;
 const Index = () => {
    const [data, setData] = useState([]);
    const [open, setOpen] = useState(false);
    const [update, setUpdate] = useState({});
+   const [total, setTotal] = useState();
+   const [params, setParams] = useState({
+      search: "",
+      limit: 2,
+      page: 1,
+   });
    const { id } = useParams();
    const openModal = () => {
       setOpen(true);
@@ -56,6 +62,7 @@ const Index = () => {
          const response = await subCategory.get(id);
          if (response.status === 200) {
             setData(response?.data?.data?.subcategories);
+            setTotal(response?.data?.data?.count);
          }
       } catch (error) {
          console.log(error);
@@ -77,13 +84,21 @@ const Index = () => {
    };
    useEffect(() => {
       getSubCategory();
-   }, []);
+   }, [params]);
    const onSearch = (value, _e, info) => {
       console.log(value, _e, info);
    };
+   const handleTableChange = (pagination) => {
+      const { current, pageSize } = pagination;
+      setParams({
+         ...params,
+         page: current,
+         limit: pageSize,
+      });
+   };
    return (
       <div>
-         <SubCategoryModal
+         <SubCategory
             open={open}
             handleClose={handleClose}
             update={update}
@@ -107,7 +122,14 @@ const Index = () => {
          <UniversalTable
             columns={columns}
             dataSource={data}
-            pagination={{ pageSize: 5 }}
+            pagination={{
+               current: params.page,
+               pageSize: params.limit,
+               total: total,
+               showSizeChanger: true,
+               pageSizeOptions: [2, 3, 5, 10, 20],
+            }}
+            handleChange={handleTableChange}
          />
       </div>
    );

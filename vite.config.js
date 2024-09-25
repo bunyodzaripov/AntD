@@ -10,6 +10,7 @@ export default defineConfig({
          { find: "@pages", replacement: "/src/pages" },
          { find: "@components", replacement: "/src/components" },
          { find: "@service", replacement: "/src/service" },
+         { find: "@modals", replacement: "/src/modals" },
       ],
    },
 });
