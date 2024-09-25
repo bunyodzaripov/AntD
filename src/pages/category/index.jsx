@@ -19,7 +19,7 @@ const Index = () => {
    const [total, setTotal] = useState();
    const [params, setParams] = useState({
       search: "",
-      limit: 2,
+      limit: 3,
       page: 1,
    });
    const navigate = useNavigate();
@@ -109,7 +109,6 @@ const Index = () => {
             open={open}
             handleClose={handleClose}
             update={update}
-            setUpdate={setUpdate}
             getCategory={getCategory}
          />
          <div className="flex justify-between mb-4">

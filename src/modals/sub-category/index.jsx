@@ -1,35 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Modal, Input, Form } from "antd";
 import { subCategory } from "@service";
-const App = (props) => {
+const Index = (props) => {
    const [form] = Form.useForm();
-   const {
-      open,
-      handleClose,
-      getSubCategory,
-      update,
-      setUpdate = () => {},
-      id,
-   } = props;
-   const onFinish = async (values) => {
+   const { open, handleClose, getSubCategory, update, id } = props;
+   useEffect(() => {
+      if (update.id) {
+         form.setFieldsValue({
+            name: update.name,
+         });
+      } else {
+         form.resetFields();
+      }
+   }, [update, form]);
+   const handleSubmit = async (values) => {
+      console.log(values, "form values");
+      console.log(update, "form update");
+      console.log(id, "parent id");
       try {
          if (update.id) {
-            const response = await subCategory.update(update.id, values);
+            const response = await subCategory.update(update.id, {
+               name: values.name,
+               parent_category_id: parseInt(id),
+            });
             if (response.status === 200) {
                handleClose();
                getSubCategory();
-               setUpdate({});
-               form.resetFields();
             }
          } else {
             const response = await subCategory.create({
-               ...values,
+               name: values.name,
                parent_category_id: parseInt(id),
             });
+
             if (response.status === 201) {
                handleClose();
                getSubCategory();
-               form.resetFields();
             }
          }
       } catch (error) {
@@ -58,7 +64,7 @@ const App = (props) => {
                </div>
             }
          >
-            <Form form={form} id="basic" name="basic" onFinish={onFinish}>
+            <Form form={form} id="basic" name="basic" onFinish={handleSubmit}>
                <Form.Item
                   label="Subcategory name"
                   name="name"
@@ -78,5 +84,4 @@ const App = (props) => {
       </>
    );
 };
-
-export default App;
+export default Index;

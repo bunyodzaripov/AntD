@@ -15,7 +15,7 @@ const Index = () => {
    const [total, setTotal] = useState();
    const [params, setParams] = useState({
       search: "",
-      limit: 2,
+      limit: 3,
       page: 1,
    });
    const { id } = useParams();
@@ -24,6 +24,7 @@ const Index = () => {
    };
    const handleClose = () => {
       setOpen(false);
+      setUpdate({});
    };
    const columns = [
       {
@@ -102,7 +103,6 @@ const Index = () => {
             open={open}
             handleClose={handleClose}
             update={update}
-            setUpdate={setUpdate}
             id={id}
             getSubCategory={getSubCategory}
          />

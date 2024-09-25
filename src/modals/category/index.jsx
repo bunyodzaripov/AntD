@@ -1,33 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Modal, Input, Form } from "antd";
 import { category } from "@service";
-const App = (props) => {
+const Index = (props) => {
    const [form] = Form.useForm();
-   const {
-      open,
-      handleClose,
-      getCategory,
-      update,
-      setUpdate = () => {},
-   } = props;
-   const onFinish = async (values) => {
+   const { open, handleClose, getCategory, update } = props;
+   useEffect(() => {
+      if (update.id) {
+         form.setFieldsValue({
+            name: update.name,
+         });
+      } else {
+         form.resetFields();
+      }
+   }, [update, form]);
+   const handleSubmit = async (values) => {
       try {
          if (update.id) {
-            console.log(update, "update");
-
             const response = await category.update(update.id, values);
             if (response.status === 200) {
                handleClose();
                getCategory();
-               setUpdate({});
-               form.resetFields();
             }
          } else {
             const response = await category.create(values);
             if (response.status === 201) {
                handleClose();
                getCategory();
-               form.resetFields();
             }
          }
       } catch (error) {
@@ -56,7 +54,7 @@ const App = (props) => {
                </div>
             }
          >
-            <Form form={form} id="basic" name="basic" onFinish={onFinish}>
+            <Form form={form} id="basic" name="basic" onFinish={handleSubmit}>
                <Form.Item
                   label="Category name"
                   name="name"
@@ -76,5 +74,4 @@ const App = (props) => {
       </>
    );
 };
-
-export default App;
+export default Index;
