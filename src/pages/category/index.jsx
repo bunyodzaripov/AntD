@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { UniversalTable } from "@components";
-import { category } from "@service";
-import { Category } from "@modals";
 import { Button, Input, Space } from "antd";
 import {
    EditOutlined,
@@ -11,6 +8,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router";
+import { useLocation } from "react-router-dom";
+import { UniversalTable, Popconfirm } from "@components";
+import { category } from "@service";
+import { Category } from "@modals";
+
 const { Search } = Input;
 const Index = () => {
    const [open, setOpen] = useState(false);
@@ -23,6 +25,20 @@ const Index = () => {
       page: 1,
    });
    const navigate = useNavigate();
+   const { search } = useLocation();
+   useEffect(() => {
+      getCategory();
+   }, [params]);
+   useEffect(() => {
+      const params = new URLSearchParams(search);
+      const page = Number(params.get("page")) || 1;
+      const limit = Number(params.get("limit")) || 3;
+      setParams((prev) => ({
+         ...prev,
+         page: page,
+         limit: limit,
+      }));
+   }, [search]);
    const openModal = () => {
       setOpen(true);
    };
@@ -50,9 +66,17 @@ const Index = () => {
          align: "center",
          render: (item) => (
             <div>
-               <Button onClick={() => deleteCategory(item.id)}>
-                  <DeleteOutlined />
-               </Button>
+               <Popconfirm
+                  title="Delete the category"
+                  description="Are you sure to delete this category?"
+                  okText="Yes"
+                  onConfirm={() => deleteCategory(item.id)}
+                  cancelText="No"
+               >
+                  <Button>
+                     <DeleteOutlined />
+                  </Button>
+               </Popconfirm>
                <Button
                   style={{ marginLeft: "10px" }}
                   onClick={() => editCategory(item)}
@@ -89,19 +113,20 @@ const Index = () => {
    const viewCategory = async (id) => {
       navigate(`/admin-layout/sub-category/${id}`);
    };
-   useEffect(() => {
-      getCategory();
-   }, [params]);
    const onSearch = (value, _e, info) => {
       console.log(value, _e, info);
    };
    const handleTableChange = (pagination) => {
-      const { current, pageSize } = pagination;
-      setParams({
-         ...params,
+      const { current = 1, pageSize = 10 } = pagination;
+      setParams((prev) => ({
+         ...prev,
          page: current,
          limit: pageSize,
-      });
+      }));
+      const current_params = new URLSearchParams(search);
+      current_params.set("page", `${current}`);
+      current_params.set("limit", `${pageSize}`);
+      navigate(`?${current_params}`);
    };
    return (
       <div>
@@ -139,5 +164,4 @@ const Index = () => {
       </div>
    );
 };
-
 export default Index;

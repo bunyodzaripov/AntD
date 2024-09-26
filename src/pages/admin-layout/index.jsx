@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import {
+   MenuFoldOutlined,
+   MenuUnfoldOutlined,
+   LogoutOutlined,
+} from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Outlet } from "react-router";
 const { Header, Sider, Content } = Layout;
 import { admin } from "../../routes/routes";
-import { NavLink } from "react-router-dom";
-import { MenuDropdown } from "@components";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Popconfirm } from "@components";
 const App = () => {
    const [collapsed, setCollapsed] = useState(false);
+   const navigate = useNavigate();
    const {
       token: { colorBgContainer, borderRadiusLG },
    } = theme.useToken();
@@ -35,6 +40,7 @@ const App = () => {
                   padding: 0,
                   display: "flex",
                   justifyContent: "space-between",
+                  alignItems: "center",
                   background: colorBgContainer,
                }}
             >
@@ -50,7 +56,28 @@ const App = () => {
                      height: 64,
                   }}
                />
-               <MenuDropdown />
+
+               <Popconfirm
+                  title="Logout"
+                  description="Are you sure to logout?"
+                  okText="Yes"
+                  cancelText="No"
+                  onConfirm={() => {
+                     localStorage.removeItem("token");
+                     navigate("/");
+                  }}
+                  placement="leftBottom"
+               >
+                  <Button
+                     type="text"
+                     icon={<LogoutOutlined />}
+                     style={{
+                        fontSize: "16px",
+                        width: 64,
+                        height: 64,
+                     }}
+                  />
+               </Popconfirm>
             </Header>
             <Content
                style={{

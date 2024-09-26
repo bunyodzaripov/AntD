@@ -1,3 +1,3 @@
 import UniversalTable from "./universal-table";
-import MenuDropdown from "./menu";
-export { UniversalTable, MenuDropdown };
+import Popconfirm from "./popconfirm";
+export { UniversalTable, Popconfirm };

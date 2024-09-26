@@ -4,8 +4,9 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Input, Space } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
+import { useNavigate, useLocation } from "react-router-dom";
 import { subCategory } from "@service";
-import { UniversalTable } from "@components";
+import { UniversalTable, Popconfirm } from "@components";
 import { SubCategory } from "@modals";
 const { Search } = Input;
 const Index = () => {
@@ -19,6 +20,21 @@ const Index = () => {
       page: 1,
    });
    const { id } = useParams();
+   const navigate = useNavigate();
+   const { search } = useLocation();
+   useEffect(() => {
+      getSubCategory();
+   }, [params]);
+   useEffect(() => {
+      const params = new URLSearchParams(search);
+      const page = Number(params.get("page")) || 1;
+      const limit = Number(params.get("limit")) || 3;
+      setParams((prev) => ({
+         ...prev,
+         page: page,
+         limit: limit,
+      }));
+   }, [search]);
    const openModal = () => {
       setOpen(true);
    };
@@ -45,9 +61,17 @@ const Index = () => {
          align: "center",
          render: (item) => (
             <div>
-               <Button onClick={() => deleteSubCategory(item.id)}>
-                  <DeleteOutlined />
-               </Button>
+               <Popconfirm
+                  title="Delete the subcategory"
+                  description="Are you sure to delete this subcategory?"
+                  okText="Yes"
+                  onConfirm={() => deleteSubCategory(item.id)}
+                  cancelText="No"
+               >
+                  <Button>
+                     <DeleteOutlined />
+                  </Button>
+               </Popconfirm>
                <Button
                   style={{ marginLeft: "10px" }}
                   onClick={() => editSubCategory(item)}
@@ -83,19 +107,20 @@ const Index = () => {
       setUpdate(item);
       setOpen(true);
    };
-   useEffect(() => {
-      getSubCategory();
-   }, [params]);
    const onSearch = (value, _e, info) => {
       console.log(value, _e, info);
    };
    const handleTableChange = (pagination) => {
-      const { current, pageSize } = pagination;
-      setParams({
-         ...params,
+      const { current = 1, pageSize = 10 } = pagination;
+      setParams((prev) => ({
+         ...prev,
          page: current,
          limit: pageSize,
-      });
+      }));
+      const current_params = new URLSearchParams(search);
+      current_params.set("page", `${current}`);
+      current_params.set("limit", `${pageSize}`);
+      navigate(`?${current_params}`);
    };
    return (
       <div>
