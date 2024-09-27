@@ -17,7 +17,7 @@ const App = () => {
       token: { colorBgContainer, borderRadiusLG },
    } = theme.useToken();
    return (
-      <Layout className="h-[100vh]">
+      <Layout>
          <Sider trigger={null} collapsible collapsed={collapsed}>
             <div className="text-white text-2xl font-bold text-center py-4 cursor-pointer">
                Logo
@@ -83,9 +83,10 @@ const App = () => {
                style={{
                   margin: "24px 16px",
                   padding: 24,
-                  minHeight: 280,
+                  minHeight: "calc(100vh - 64px)",
                   background: colorBgContainer,
                   borderRadius: borderRadiusLG,
+                  overflow: "auto",
                }}
             >
                <Outlet />

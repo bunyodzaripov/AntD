@@ -14,9 +14,6 @@ const Index = (props) => {
       }
    }, [update, form]);
    const handleSubmit = async (values) => {
-      console.log(values, "form values");
-      console.log(update, "form update");
-      console.log(id, "parent id");
       try {
          if (update.id) {
             const response = await subCategory.update(update.id, {
