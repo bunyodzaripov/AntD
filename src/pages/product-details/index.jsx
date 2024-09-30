@@ -42,7 +42,7 @@ const Index = () => {
    const discountedPrice = productData.price
       ? productData.price - (productData.price * data.discount) / 100
       : 0;
-
+   const isDisable = Object.keys(data).length > 0;
    return (
       <Card
          style={{
@@ -115,6 +115,7 @@ const Index = () => {
                type="primary"
                style={{ marginRight: "10px" }}
                onClick={openModal}
+               disabled={isDisable}
             >
                Add Details
             </Button>

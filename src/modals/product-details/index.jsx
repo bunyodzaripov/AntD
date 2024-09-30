@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button, Input, Form, InputNumber, Drawer } from "antd";
 import { productDetails } from "@service";
 
 const App = (props) => {
    const [form] = Form.useForm();
    const { open, update, getData, id, setOpen } = props;
-
    useEffect(() => {
       if (update.id) {
          form.setFieldsValue({
             description: update.description,
-            colors: update.colors,
+            colors: update.colors?.join(","),
             quantity: update.quantity,
             discount: parseInt(update.discount),
          });
@@ -22,10 +21,10 @@ const App = (props) => {
    const handleSubmit = async (values) => {
       try {
          if (update.id) {
-            const res = await productDetails.update(
-               { product_id: parseInt(id) },
-               values
-            );
+            const res = await productDetails.update(update.id, {
+               ...values,
+               product_id: parseInt(id),
+            });
             if (res.status === 200) {
                handleClose();
                getData();
@@ -78,7 +77,7 @@ const App = (props) => {
                      { required: true, message: "Please enter product colors" },
                   ]}
                >
-                  <Input type="string" />
+                  <Input />
                </Form.Item>
 
                <Form.Item

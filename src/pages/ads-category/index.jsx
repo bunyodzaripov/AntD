@@ -1,10 +1,44 @@
 import React, { useEffect, useState } from "react";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Button, Popconfirm, Tooltip } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
 import { adsCategory } from "@service";
 import { UniversalTable } from "@components";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { AdsCategory } from "@modals";
+
 const Index = () => {
    const [data, setData] = useState([]);
+   const [open, setOpen] = useState(false);
+   const openModal = () => {
+      setOpen(true);
+   };
+   const handleClose = () => {
+      setOpen(false);
+   };
+   useEffect(() => {
+      getData();
+   }, []);
+   const getData = async () => {
+      try {
+         const res = await adsCategory.get();
+         if (res.status === 200) {
+            setData(res?.data?.data);
+         }
+      } catch (error) {
+         console.log(error);
+      }
+   };
+   const deleteCategory = async (id) => {
+      try {
+         const res = await adsCategory.delete(id);
+         if (res.status === 200) {
+            getData();
+         }
+      } catch (error) {
+         console.log(error);
+      }
+   };
    const columns = [
       {
          title: "ID",
@@ -29,39 +63,45 @@ const Index = () => {
          title: "Action",
          key: "action",
          align: "center",
-         render: () => (
+         render: (item) => (
             <div>
-               <Button>
-                  <DeleteOutlined />
-               </Button>
-               <Button style={{ marginLeft: "10px" }}>
-                  <EditOutlined />
-               </Button>
+               <Popconfirm
+                  title="Delete the category"
+                  description="Are you sure to delete this category?"
+                  okText="Yes"
+                  onConfirm={() => deleteCategory(item.id)}
+                  cancelText="No"
+               >
+                  <Tooltip title="Delete">
+                     <Button>
+                        <DeleteOutlined />
+                     </Button>
+                  </Tooltip>
+               </Popconfirm>
             </div>
          ),
       },
    ];
-   const getAds = async () => {
-      try {
-         const response = await adsCategory.get();
-         if (response.status === 200) {
-            setData(response?.data?.data);
-         }
-      } catch (error) {
-         console.log(error);
-      }
-   };
-   useEffect(() => {
-      getAds();
-   }, []);
    return (
-      <div>
+      <>
+         <AdsCategory
+            open={open}
+            setOpen={setOpen}
+            getData={getData}
+            handleClose={handleClose}
+         />
+         <div className="flex justify-end mb-4">
+            <Button onClick={openModal}>
+               <FontAwesomeIcon icon={faSquarePlus} />
+               <span className="ml-2">Add New Banner</span>
+            </Button>
+         </div>
          <UniversalTable
             columns={columns}
             dataSource={data}
             pagination={{ pageSize: 5 }}
          />
-      </div>
+      </>
    );
 };
 

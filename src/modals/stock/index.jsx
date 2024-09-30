@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Drawer, Form, Input, Row, Select, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import { products, category, brand, brandCategory } from "@service";
+import { Button, Col, Drawer, Form, Input, Row, Select } from "antd";
+import { products, category, brand, brandCategory, stock } from "@service";
 const { Option } = Select;
 
 const App = (props) => {
@@ -9,16 +8,15 @@ const App = (props) => {
    const [form] = Form.useForm();
    const [categoryData, setCategoryData] = useState([]);
    const [brandData, setBrandData] = useState([]);
-   const [brandCategoryData, setBrandCategoryData] = useState([]);
+   const [productsData, setProductsData] = useState([]);
 
    useEffect(() => {
       if (update.id) {
          form.setFieldsValue({
-            name: update.name,
-            price: update.price,
             category_id: update.category_id,
             brand_id: update.brand_id,
-            brand_category_id: update.brand_category_id,
+            product_id: update.product_id,
+            quantity: parseInt(update.quantity),
          });
       } else {
          form.resetFields();
@@ -26,6 +24,7 @@ const App = (props) => {
    }, [update, form]);
    useEffect(() => {
       getCategory();
+      getProduct();
    }, []);
 
    const getCategory = async () => {
@@ -33,34 +32,27 @@ const App = (props) => {
       setCategoryData(res?.data?.data?.categories);
    };
 
+   const getProduct = async () => {
+      const res = await products.get();
+      setProductsData(res?.data?.data?.products);
+   };
+
    const handleSubmit = async (values) => {
-      const editData = {
-         name: values.name,
-         price: parseInt(values.price),
+      const newdata = {
          category_id: parseInt(values.category_id),
          brand_id: parseInt(values.brand_id),
-         brand_category_id: parseInt(values.brand_category_id),
+         product_id: parseInt(values.product_id),
+         quantity: parseInt(values.quantity),
       };
-
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("price", values.price);
-      formData.append("category_id", parseInt(values.category_id));
-      formData.append("brand_id", values.brand_id);
-      formData.append("brand_category_id", values.brand_category_id);
-      if (values.file && values.file.file) {
-         formData.append("file", values.file.file);
-      }
-
       try {
          if (update.id) {
-            const res = await products.update(update.id, editData);
+            const res = await stock.update(update.id, newdata);
             if (res.status === 200) {
                handleClose();
                getData();
             }
          } else {
-            const res = await products.create(formData);
+            const res = await stock.create(newdata);
             if (res.status === 201) {
                handleClose();
                getData();
@@ -76,9 +68,6 @@ const App = (props) => {
          if (inputName === "category_id") {
             const res = await brand.getCategory(value);
             setBrandData(res?.data?.data?.brands);
-         } else if (inputName === "brand_id") {
-            const res = await brandCategory.getBrand(value);
-            setBrandCategoryData(res?.data?.data?.brandCategories);
          }
       } catch (error) {
          console.log(error);
@@ -92,7 +81,7 @@ const App = (props) => {
    return (
       <>
          <Drawer
-            width={720}
+            width={520}
             onClose={handleClose}
             open={open}
             styles={{
@@ -101,38 +90,8 @@ const App = (props) => {
                },
             }}
          >
-            <h1 className="text-2xl font-semibold mb-4">Add Product</h1>
+            <h1 className="text-2xl font-semibold mb-4">Add new stock</h1>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
-               <Row gutter={16}>
-                  <Col span={12}>
-                     <Form.Item
-                        label="Product Name"
-                        name="name"
-                        rules={[
-                           {
-                              required: true,
-                              message: "Please enter product name",
-                           },
-                        ]}
-                     >
-                        <Input allowClear />
-                     </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                     <Form.Item
-                        label="Product price"
-                        name="price"
-                        rules={[
-                           {
-                              required: true,
-                              message: "Please enter url",
-                           },
-                        ]}
-                     >
-                        <Input type="number" allowClear />
-                     </Form.Item>
-                  </Col>
-               </Row>
                <Row gutter={16}>
                   <Col span={12}>
                      <Form.Item
@@ -189,8 +148,8 @@ const App = (props) => {
                <Row gutter={16}>
                   <Col span={12}>
                      <Form.Item
-                        name="brand_category_id"
-                        label="Select brand category"
+                        name="product_id"
+                        label="Select Product"
                         rules={[
                            {
                               required: true,
@@ -202,11 +161,10 @@ const App = (props) => {
                            allowClear
                            showSearch
                            onChange={(value) =>
-                              handleChange(value, "brand_category_id")
+                              handleChange(value, "product_id")
                            }
-                           disabled={!form.getFieldValue("brand_id")}
                         >
-                           {brandCategoryData?.map((item, index) => (
+                           {productsData?.map((item, index) => (
                               <Option value={item.id} key={index}>
                                  {item.name}
                               </Option>
@@ -215,34 +173,18 @@ const App = (props) => {
                      </Form.Item>
                   </Col>
                   <Col span={12}>
-                     {!update.id && (
-                        <Form.Item
-                           name="files"
-                           label="Product image"
-                           rules={[
-                              {
-                                 required: true,
-                                 message: "Please upload product image",
-                              },
-                           ]}
-                        >
-                           <Upload
-                              beforeUpload={() => false}
-                              maxCount={5}
-                              listType="picture"
-                              action={
-                                 "https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                              }
-                           >
-                              <Button
-                                 className="w-full"
-                                 icon={<UploadOutlined />}
-                              >
-                                 Upload Logo
-                              </Button>
-                           </Upload>
-                        </Form.Item>
-                     )}
+                     <Form.Item
+                        name="quantity"
+                        label="Quantity"
+                        rules={[
+                           {
+                              required: true,
+                              message: "Please enter the quantity",
+                           },
+                        ]}
+                     >
+                        <Input type="number" />
+                     </Form.Item>
                   </Col>
                </Row>
                <Row gutter={16}>

@@ -15,8 +15,8 @@ const Index = () => {
    const [categoryData, setCategoryData] = useState([]);
    const [params, setParams] = useState({
       search: "",
-      limit: 3,
-      page: 1,
+      limit: 5,
+      page: 3,
    });
    const navigate = useNavigate();
    const { search } = useLocation();
@@ -26,8 +26,8 @@ const Index = () => {
    }, [params]);
    useEffect(() => {
       const params = new URLSearchParams(search);
-      const page = Number(params.get("page")) || 1;
-      const limit = Number(params.get("limit")) || 3;
+      const page = Number(params.get("page")) || 4;
+      const limit = Number(params.get("limit")) || 4;
       const search_val = params.get("search") || "";
       setParams((prev) => ({
          ...prev,

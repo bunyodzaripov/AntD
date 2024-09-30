@@ -23,7 +23,6 @@ const Index = (props) => {
       }
    }, [update, form]);
    const handleSubmit = async (values) => {
-      console.log(values, "values");
       setEdit({
          name: values.name,
          categoryId: parseInt(values.category_id),

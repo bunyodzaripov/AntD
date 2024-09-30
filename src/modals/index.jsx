@@ -4,6 +4,8 @@ import Brand from "./brand";
 import BrandCategory from "./brand-category";
 import Products from "./products";
 import ProductDetails from "./product-details";
+import AdsCategory from "./ads-category";
+import Stock from "./stock";
 export {
    Category,
    SubCategory,
@@ -11,4 +13,6 @@ export {
    BrandCategory,
    Products,
    ProductDetails,
+   AdsCategory,
+   Stock,
 };
