@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Button, Input, Tooltip } from "antd";
-import {
-   EditOutlined,
-   DeleteOutlined,
-   FolderViewOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UniversalTable, Popconfirm } from "@components";
-import { brand } from "@service";
+import { brand, category } from "@service";
 import { Brand } from "@modals";
 const Index = () => {
    const [open, setOpen] = useState(false);
    const [data, setData] = useState([]);
    const [update, setUpdate] = useState({});
    const [total, setTotal] = useState();
+   const [categoryData, setCategoryData] = useState([]);
    const [params, setParams] = useState({
       search: "",
       limit: 3,
@@ -25,6 +22,7 @@ const Index = () => {
    const { search } = useLocation();
    useEffect(() => {
       getData();
+      getCategory();
    }, [params]);
    useEffect(() => {
       const params = new URLSearchParams(search);
@@ -50,6 +48,12 @@ const Index = () => {
       if (res.status === 200) {
          setData(res?.data?.data?.brands);
          setTotal(res?.data?.data?.count);
+      }
+   };
+   const getCategory = async () => {
+      const res = await category.get();
+      if (res.status === 200) {
+         setCategoryData(res?.data?.data?.categories);
       }
    };
    const deleteData = async (id) => {
@@ -135,6 +139,7 @@ const Index = () => {
             handleClose={handleClose}
             update={update}
             getData={getData}
+            categoryData={categoryData}
          />
          <div className="flex justify-between mb-4">
             <Input
