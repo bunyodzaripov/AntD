@@ -9,6 +9,7 @@ import Stock from "./stock";
 import Settings from "./settings";
 import Products from "./products";
 import SubCategory from "./sub-category";
+import ProductDetails from "./product-details";
 export {
    SignIn,
    SignUp,
@@ -21,4 +22,5 @@ export {
    Settings,
    Products,
    SubCategory,
+   ProductDetails,
 };

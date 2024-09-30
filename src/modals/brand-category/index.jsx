@@ -82,14 +82,14 @@ const Index = (props) => {
                   rules={[
                      {
                         required: true,
-                        message: "Please select category!",
+                        message: "Please select a brand!",
                      },
                   ]}
                >
                   <Select
                      allowClear
                      showSearch
-                     placeholder="Select a Category"
+                     placeholder="Select a brand"
                      filterOption={(input, option) =>
                         (option?.label ?? "")
                            .toLowerCase()
