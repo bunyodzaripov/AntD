@@ -1,13 +1,11 @@
-import React from "react";
 import { Button, Form, Input } from "antd";
 import SignInImg from "../../assets/images/sign-in.jpg";
 import { useNavigate } from "react-router";
-import { auth } from "@service";
 import { NavLink } from "react-router-dom";
+import { auth } from "@service";
 const Index = () => {
    const navigate = useNavigate();
    const onFinish = async (values) => {
-      console.log(values);
       try {
          const response = await auth.sign_in(values);
          let access_token = response?.data?.data.tokens.access_token;
@@ -22,6 +20,7 @@ const Index = () => {
    const onFinishFailed = (errorInfo) => {
       console.log("Failed:", errorInfo);
    };
+
    return (
       <div className="w-[100%] h-[100vh] flex container mx-auto">
          <div className="w-[50%] flex justify-center items-center">

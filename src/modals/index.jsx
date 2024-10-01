@@ -6,6 +6,7 @@ import Products from "./products";
 import ProductDetails from "./product-details";
 import AdsCategory from "./ads-category";
 import Stock from "./stock";
+import Settings from "./settings";
 export {
    Category,
    SubCategory,
@@ -15,4 +16,5 @@ export {
    ProductDetails,
    AdsCategory,
    Stock,
+   Settings,
 };

@@ -7,6 +7,7 @@ import adsCategory from "./ads-category";
 import stock from "./stock";
 import subCategory from "./sub-category";
 import productDetails from "./product-details";
+import settings from "./settings";
 export {
    auth,
    category,
@@ -17,4 +18,5 @@ export {
    stock,
    subCategory,
    productDetails,
+   settings,
 };
