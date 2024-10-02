@@ -9,13 +9,14 @@ const App = (props) => {
    const [categoryData, setCategoryData] = useState([]);
    const [brandData, setBrandData] = useState([]);
    const [productsData, setProductsData] = useState([]);
+   console.log(update);
 
    useEffect(() => {
       if (update.id) {
          form.setFieldsValue({
-            category_id: update.category_id,
+            category_id: update.category_id?.id,
             brand_id: update.brand_id,
-            product_id: update.product_id,
+            product_id: update.product_id?.id,
             quantity: parseInt(update.quantity),
          });
       } else {
