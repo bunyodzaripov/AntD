@@ -19,8 +19,8 @@ const Index = () => {
    const [total, setTotal] = useState();
    const [params, setParams] = useState({
       search: "",
-      limit: 3,
-      page: 1,
+      limit: "",
+      page: "",
    });
    const navigate = useNavigate();
    const { search } = useLocation();
@@ -30,7 +30,7 @@ const Index = () => {
    useEffect(() => {
       const params = new URLSearchParams(search);
       const page = Number(params.get("page")) || 1;
-      const limit = Number(params.get("limit")) || 3;
+      const limit = Number(params.get("limit")) || 5;
       const search_val = params.get("search") || "";
       setParams((prev) => ({
          ...prev,
@@ -63,7 +63,7 @@ const Index = () => {
       navigate(`/admin-layout/product-details/${id}`);
    };
    const handleTableChange = (pagination) => {
-      const { current = 1, pageSize = 10 } = pagination;
+      const { current, pageSize } = pagination;
       setParams((prev) => ({
          ...prev,
          page: current,

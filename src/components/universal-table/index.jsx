@@ -2,13 +2,7 @@ import React from "react";
 import { Table } from "antd";
 
 export default function UniversalTable(props) {
-   const {
-      columns = [],
-      dataSource = [],
-      rowKey = "id",
-      pagination = true,
-      handleChange,
-   } = props;
+   const { columns, dataSource, rowKey, pagination, handleChange } = props;
 
    return (
       <Table
