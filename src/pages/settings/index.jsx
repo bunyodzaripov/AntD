@@ -10,6 +10,8 @@ const Index = () => {
    const navigate = useNavigate();
    const [user, setUser] = useState();
    const [open, setOpen] = useState(false);
+   const userId = localStorage.getItem("userId");
+
    useEffect(() => {
       getUser();
    }, []);
@@ -17,7 +19,7 @@ const Index = () => {
       setOpen(true);
    };
    const getUser = async () => {
-      const res = await settings.getOne("75");
+      const res = await settings.getOne(userId);
       if (res.status === 200) {
          setUser(res?.data?.data);
       }

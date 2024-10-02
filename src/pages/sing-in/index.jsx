@@ -9,7 +9,9 @@ const Index = () => {
       try {
          const response = await auth.sign_in(values);
          let access_token = response?.data?.data.tokens.access_token;
+         let userId = response?.data?.data?.data?.id;
          localStorage.setItem("access_token", access_token);
+         localStorage.setItem("userId", userId);
          if (response.status === 201) {
             navigate("/admin-layout");
          }
