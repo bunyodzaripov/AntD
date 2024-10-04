@@ -7,8 +7,7 @@ import {
 } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
-import { useNavigate } from "react-router";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { UniversalTable, Popconfirm } from "@components";
 import { category } from "@service";
 import { Category } from "@modals";
