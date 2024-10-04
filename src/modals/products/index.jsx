@@ -84,7 +84,6 @@ const App = (props) => {
          console.log(error);
       }
    };
-
    const handleClose = () => {
       form.resetFields();
       setOpen(false);

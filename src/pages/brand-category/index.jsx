@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, Tooltip } from "antd";
+import { Button, Input, Select, Tooltip } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus } from "@fortawesome/free-regular-svg-icons";
@@ -87,6 +87,16 @@ const Index = () => {
       search_params.set("search", event.target.value);
       navigate(`?${search_params}`);
    };
+   const handleFilter = async (value) => {
+      try {
+         const res = await brandCategory.getBrand(value);
+         console.log(res.data.data.brandCategories);
+         setData(res?.data?.data?.brandCategories);
+         setTotal(res?.data?.data?.count);
+      } catch (error) {
+         console.log(error);
+      }
+   };
    const columns = [
       {
          title: "ID",
@@ -94,7 +104,6 @@ const Index = () => {
          key: "id",
          align: "center",
       },
-
       {
          title: "Brand category name",
          dataIndex: "name",
@@ -142,12 +151,26 @@ const Index = () => {
             brandData={brandData}
          />
          <div className="flex justify-between mb-4">
-            <Input
-               placeholder="Search brand category..."
-               className="w-[300px]"
-               onChange={handleSearch}
-               allowClear
-            />
+            <div>
+               <Input
+                  placeholder="Search brand category..."
+                  className="w-[300px]"
+                  onChange={handleSearch}
+                  allowClear
+               />
+               <Select
+                  placeholder="Filter"
+                  allowClear
+                  onChange={(value) => handleFilter(value)}
+                  style={{ width: 120, marginLeft: 10 }}
+               >
+                  {brandData?.map((item) => (
+                     <Select.Option key={item.id} value={item.id}>
+                        {item.name}
+                     </Select.Option>
+                  ))}
+               </Select>
+            </div>
             <Button onClick={openModal}>
                <FontAwesomeIcon icon={faSquarePlus} />
                <span className="ml-2">Add New Brand Category</span>

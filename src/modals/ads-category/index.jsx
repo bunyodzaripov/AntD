@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Modal, Input, Form, Upload } from "antd";
+import { Button, Modal, Input, Form, Upload, Select } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { adsCategory } from "@service";
 const Index = (props) => {
@@ -60,7 +60,11 @@ const Index = (props) => {
                      },
                   ]}
                >
-                  <Input allowClear type="number" />
+                  <Select allowClear>
+                     <Option value="1">1</Option>
+                     <Option value="2">2</Option>
+                     <Option value="3">3</Option>
+                  </Select>
                </Form.Item>
 
                <Form.Item

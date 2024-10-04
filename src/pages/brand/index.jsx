@@ -48,6 +48,7 @@ const Index = () => {
       if (res.status === 200) {
          setData(res?.data?.data?.brands);
          setTotal(res?.data?.data?.count);
+         console.log(res?.data?.data);
       }
    };
    const getCategory = async () => {
@@ -99,6 +100,12 @@ const Index = () => {
          title: "Brand name",
          dataIndex: "name",
          key: "name",
+         align: "center",
+      },
+      {
+         title: "Description",
+         dataIndex: "description",
+         key: "description",
          align: "center",
       },
       {
