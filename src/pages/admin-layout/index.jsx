@@ -1,17 +1,18 @@
 import React, { useState } from "react";
+import { Button, Layout, Menu, theme } from "antd";
 import {
    MenuFoldOutlined,
    MenuUnfoldOutlined,
    LogoutOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, theme } from "antd";
-import { Outlet } from "react-router";
-const { Header, Sider, Content } = Layout;
 import { admin } from "../../routes/routes";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Popconfirm } from "@components";
+const { Header, Sider, Content } = Layout;
+
 const App = () => {
    const [collapsed, setCollapsed] = useState(false);
+   const { pathname } = useLocation();
    const navigate = useNavigate();
    const {
       token: { colorBgContainer, borderRadiusLG },
@@ -22,16 +23,13 @@ const App = () => {
             <div className="text-white text-2xl font-bold text-center py-4 cursor-pointer">
                Logo
             </div>
-            <Menu
-               theme="dark"
-               mode="inline"
-               defaultSelectedKeys={["1"]}
-               items={admin.map((item, index) => ({
-                  key: index + 1,
-                  icon: item.icon,
-                  label: <NavLink to={item.path}>{item.content}</NavLink>,
-               }))}
-            />
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={[pathname]}>
+               {admin.map((item) => (
+                  <Menu.Item key={item.path} icon={item.icon}>
+                     <NavLink to={item.path}>{item.content}</NavLink>
+                  </Menu.Item>
+               ))}
+            </Menu>
          </Sider>
          <Layout>
             <Header
